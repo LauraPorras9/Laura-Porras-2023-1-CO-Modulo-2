@@ -11,6 +11,7 @@ class ObstacleManger:
         SMALL_CACTUS.extend(LARGE_CACTUS)
 
         self.obstacles = []
+        self.music = pygame.mixer.Sound('muerte.mp3')
 
     def update(self, game):
 
@@ -34,6 +35,7 @@ class ObstacleManger:
                 pygame.time.delay(1000)
                 game.death_count += 1
                 game.playing = False
+                self.music.play()
                 break
 
     def draw(self, screen):
