@@ -17,7 +17,6 @@ class ObstacleManger:
         if len(self.obstacles) == 0:
 
             random_obstacle = random.randint(0,200)
-            random_obstacle = 168
 
             if random_obstacle > 150:
 
@@ -33,9 +32,13 @@ class ObstacleManger:
 
             if game.player.dino_rect.colliderect(obstacle.rect):
                 pygame.time.delay(1000)
+                game.death_count += 1
                 game.playing = False
                 break
 
     def draw(self, screen):
         for obstacle in self.obstacles:
             obstacle.draw(screen)
+
+    def resert_obstacles(self):
+        self.obstacles = []
