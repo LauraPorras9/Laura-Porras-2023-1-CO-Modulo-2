@@ -1,12 +1,14 @@
 import pygame
+import random
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, GAMEOVER, DEAD, DEFAULT_TYPE
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, GAMEOVER, DEAD, DEFAULT_TYPE, CLOUD
 from dino_runner.components.dinosaur import Dinasaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManger
 from dino_runner.components.menu import Menu
 from dino_runner.components.score import Score
 from dino_runner.utils.constants import FONT_STYLE
 from dino_runner.components.power_ups.power_up_manager import PowerUpManager
+from dino_runner.components.clouds import Nube
 
 class Game:
     GAME_SPEED = 20
@@ -22,13 +24,14 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinasaur()
         self.obstacle_manager = ObstacleManger()
-        self.menu = Menu( self.screen)
+        self.menu = Menu(self.screen)
         self.draw_score = Score()
         self.running = False
         self.score = 0
         self.best_score = 0
         self.death_count = 0
         self.power_up_manager = PowerUpManager()
+        self.cloud = Nube()
 
     def execute(self):
         
@@ -58,9 +61,11 @@ class Game:
 
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
+        self.draw_hammer(user_input)
         self.obstacle_manager.update(self)
         self.power_up_manager.update(self)
         self.draw_score.update(self)
+        self.cloud.update(self)
 
     def draw(self):
         self.clock.tick(FPS)
@@ -74,6 +79,7 @@ class Game:
         self.obstacle_manager.draw(self.screen)
         self.draw_score.draw(self)
         self.power_up_manager.draw(self.screen)
+        self.cloud.draw(self.screen)
         self.draw_power_up_time()
         pygame.display.update()
         #pygame.display.flip()
@@ -119,4 +125,10 @@ class Game:
             else:
                 self.has_power_up = False
                 self.player.type = DEFAULT_TYPE
+
+    def draw_hammer(self, user_input):
+
+        if self.player.has_power_up:
+            if user_input[pygame.K_RIGHT]:
+                self.menu.draw_hammer(self.screen)
 

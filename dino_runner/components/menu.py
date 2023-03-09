@@ -1,5 +1,5 @@
 import pygame
-from dino_runner.utils.constants import FONT_STYLE, SCREEN_HEIGHT, SCREEN_WIDTH
+from dino_runner.utils.constants import FONT_STYLE, SCREEN_HEIGHT, SCREEN_WIDTH, HAMMER
 
 class Menu:
 
@@ -9,6 +9,7 @@ class Menu:
     def __init__(self, screen):
         screen.fill((255,255,255))
         self.font = pygame.font.Font(FONT_STYLE, 25)
+        self.image = HAMMER
 
     def update(self, game):
         pygame.display.update()

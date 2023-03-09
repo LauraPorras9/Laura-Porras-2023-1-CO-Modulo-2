@@ -1,10 +1,10 @@
 import pygame
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DUCKING_SHIELD, JUMPING_SHIELD, RUNNING_SHIELD, DEFAULT_TYPE, SHIELD_TYPE
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DUCKING_SHIELD, JUMPING_SHIELD, RUNNING_SHIELD, DEFAULT_TYPE, SHIELD_TYPE, HAMMER_TYPE, JUMPING_HAMMER, DUCKING_HAMMER, RUNNING_HAMMER
 
-RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
-JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD}
-DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD}
+RUN_IMG = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
+JUMP_IMG = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
+DUCK_IMG = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
 
 
 class Dinasaur(Sprite):
@@ -29,6 +29,7 @@ class Dinasaur(Sprite):
         self.sound = pygame.mixer.Sound('dinosaurio.mp3')
         self.has_power_up = False
         self.power_time_up = 0
+        self.hammer_throw = False
 
     def update(self, user_input):
         if self.dino_run:
@@ -48,18 +49,19 @@ class Dinasaur(Sprite):
             self.dino_run = False
             self.dino_jump = False
 
+        elif user_input[pygame.K_RIGHT]:
+            self.hammer_throw = True
+
         elif not self.dino_jump:
             self.dino_jump = False
             self.dino_run = True
             self.dino_duck = False
-
     
         if self.step_index >= 10:
             self.step_index = 0
 
     def run(self):
         self.image = RUN_IMG[self.type][self.step_index // 5]
-        # mostrar imagen cero si es contador es menor a 5, sino mostrar imagen 1
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
@@ -70,7 +72,6 @@ class Dinasaur(Sprite):
         self.image = DUCK_IMG[self.type][self.step_index // 5]
         if self.dino_duck:
             self.dino_rect.y = self.Y_POS + 30
-            self.image = DUCKING[0] if self.step_index < 5 else DUCKING[1]
             self.step_index += 1
             if not self.music:
                 self.sound.play()
@@ -91,7 +92,6 @@ class Dinasaur(Sprite):
             self.dino_rect.y = self.Y_POS
             self.dino_jump = False
             self.jump_speed = self.JUMP_SPEED
-
 
     def draw(self, screen):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
