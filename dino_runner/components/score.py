@@ -21,19 +21,13 @@ class Score:
 
     def draw(self, screen):
 
-        if self.score > 500 and self.score < 900:
-            font = pygame.font.Font(FONT_STYLE, 20)
-            text = font.render(f'Score: {self.score}', True, (255,255,255))
-            text_rect = text.get_rect()
-            text_rect.center = (1000, 50)
-            screen.screen.blit(text,text_rect)
+        font = pygame.font.Font(FONT_STYLE, 20)
+        text = font.render(f'Score: {self.score}', True, (83,83,83))
+        text_rect = text.get_rect()
+        text_rect.center = (1000, 50)
+        screen.screen.blit(text,text_rect)
 
-        else:
-            font = pygame.font.Font(FONT_STYLE, 20)
-            text = font.render(f'Score: {self.score}', True, (0,0,0))
-            text_rect = text.get_rect()
-            text_rect.center = (1000, 50)
-            screen.screen.blit(text,text_rect)
+
 
 
 
